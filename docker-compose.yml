@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  api_gateway:
+    build: ./API_gateway
+    ports:
+      - "8000:8000"
+    networks:
+      - micro_network
+
+  auth_service:
+    build: ./auth_service
+    ports:
+      - "8003:8000" # Exponeras bara för felsökning
+    networks:
+      - micro_network
+
+  user_service:
+    build: ./user_service
+    # Ingen "ports" här! De kan inte nås utifrån, bara via gatewayen (Säkert nätverk)
+    networks:
+      - micro_network
+
+  data_service:
+    build: ./data_service
+    networks:
+      - micro_network
+
+networks:
+  micro_network:
+    driver: bridge

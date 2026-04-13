@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - INTERNAL_SECURITY=HTTP #Change to HTTPS for standard architecture
+      - INTERNAL_SECURITY=HTTP #Switch HTTP/HTTPS for hybrid/traditional architecture
       - SECRET_KEY=secret
     networks:
       - micro_network
@@ -17,8 +17,6 @@ services:
 
   auth_service:
     build: ./auth_service
-    ports:
-      - "8003:8000" # Only for failsearch
     networks:
       - micro_network
     deploy:

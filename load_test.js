@@ -10,7 +10,7 @@ export let options = {
 };
 
 export function setup() {
-    const res = http.post('http://localhost:8000/auth', JSON.stringify({}));
+    const res = http.post('http://localhost:8000/auth');
     const body = JSON.parse(res.body);
     return { token: body.token };
 }

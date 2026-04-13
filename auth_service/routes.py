@@ -7,4 +7,4 @@ router = APIRouter()
 #in real environment, this would be a login endpoint that verifies user credentials and returns a token
 @router.post("/auth")
 def auth():
-    return create_token()
+    return {"token": create_token()}

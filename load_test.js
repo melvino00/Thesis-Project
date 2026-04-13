@@ -11,14 +11,15 @@ export let options = {
 
 export function setup() {
     const res = http.post('http://localhost:8000/auth', JSON.stringify({}));
-    return { token: res.body };
+    const body = JSON.parse(res.body);
+    return { token: body.token };
 }
 
     export default function (data) {
     const url = 'http://localhost:8000/users';
     const params = {
         headers: {
-            'Authorization': data.token,
+            'Authorization': `Bearer ${data.token}`,
         },
     };
     

@@ -1,7 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, HTTPException
 
 router = APIRouter()
 
 @router.get("/users")
 def get_users():
-    return {"users": ["Alice", "Bob", "Charlie"]}
+    userLevel = request.headers.get("userLevel")
+
+    if userLevel == "admin":
+        return {"Admin data"}
+    
+    else:
+        return {"users": ["Alice", "Bob", "Charlie"]}

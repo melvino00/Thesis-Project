@@ -5,26 +5,45 @@ services:
     build: ./API_gateway
     ports:
       - "8000:8000"
+    environment:
+      - INTERNAL_SECURITY=HTTP #Change to HTTPS for standard architecture
+      - SECRET_KEY=secret
     networks:
       - micro_network
+    deploy:
+      resources:
+        limits:
+          cpus: 0.50  # Resource limit for stable measurements
 
   auth_service:
     build: ./auth_service
     ports:
-      - "8003:8000" # Exponeras bara för felsökning
+      - "8003:8000" # Only for failsearch
     networks:
       - micro_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
 
   user_service:
     build: ./user_service
-    # Ingen "ports" här! De kan inte nås utifrån, bara via gatewayen (Säkert nätverk)
+    # No ports resulting in no way in
     networks:
       - micro_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
 
   data_service:
     build: ./data_service
     networks:
       - micro_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
 
 networks:
   micro_network:

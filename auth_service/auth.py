@@ -3,4 +3,8 @@ from jose import jwt
 SECRET_KEY = "secret"
 
 def create_token():
-    return jwt.encode({"user": "test"}, SECRET_KEY, algorithm="HS256")
+    payload = {
+        "sub": "12345",
+        "level": "admin"
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")

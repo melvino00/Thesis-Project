@@ -51,7 +51,7 @@ with open('metrics_output.csv', 'w', newline='') as f:
                     writer.writerow([time.time(), c.name, f"{cpu_perc:.2f}"]).replace('.', ',') # Replace dot with comma for decimal
                     
                 except Exception as e:
-                    print(f"Kunde inte läsa stats för {c.name}. Fel: {e}")
+                    print(f"Could not read stas for {c.name}. Error: {e}")
             
             time.sleep(1) # Sampling frequency 1 second
     except KeyboardInterrupt:

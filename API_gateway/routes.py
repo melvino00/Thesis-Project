@@ -1,14 +1,9 @@
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request, Response, HTTPException
 import httpx
 import os
-from auth import verify_token, get_headers
+from auth import get_headers
 
 router = APIRouter()
-
-PROTOCOL = "https" if os.getenv("INTERNAL_SECURITY") == "HTTPS" else "http"
-USER_SERVICE_URL = f"{PROTOCOL}://user_service:8000"
-DATA_SERVICE_URL = f"{PROTOCOL}://data_service:8000"
-AUTH_SERVICE_URL = f"{PROTOCOL}://auth_service:8000"
 
 AUTH_SERVICE_URL = "http://auth_service:8000"
 
@@ -22,18 +17,18 @@ async def proxy_auth():
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Couldn't reach auth_service: {str(e)}")
 
-@router.get("/users")
-async def proxy_users(request: Request):
-    # Verify and get correct header
+# Single hop
+@router.get("/single/{size}")
+async def proxy_single(size: str, request: Request):
     headers = get_headers(request)
-    async with httpx.AsyncClient(verify=False) as client:
-        response = await client.get(f"{USER_SERVICE_URL}/users", headers=headers)
+    async with httpx.AsyncClient(verify=False, timeout=30.0) as client:
+        response = await client.get(f"http://data_service:8000/single/{size}", headers=headers)
     return response.json()
 
-@router.get("/data")
-async def proxy_data(request: Request):
-    # Verify and get correct header
+# Chained
+@router.get("/chained/{size}")
+async def proxy_chained(size: str, request: Request):
     headers = get_headers(request)
-    async with httpx.AsyncClient(verify=False) as client:
-        response = await client.get(f"{DATA_SERVICE_URL}/data", headers=headers)
+    async with httpx.AsyncClient(verify=False, timeout=30.0) as client:
+        response = await client.get(f"http://data_service:8000/chained/{size}", headers=headers)
     return response.json()

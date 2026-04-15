@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - INTERNAL_SECURITY=HTTP #Switch HTTP/HTTPS for hybrid/traditional architecture
+      - INTERNAL_SECURITY=HTTPS #Switch HTTP/HTTPS for hybrid/traditional architecture
       - SECRET_KEY=secret
     networks:
       - micro_network

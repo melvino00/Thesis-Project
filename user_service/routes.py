@@ -1,13 +1,35 @@
 from fastapi import APIRouter, Request, HTTPException
+import os
+import random
+import string
+from jose import jwt, JWTError
 
 router = APIRouter()
+SECRET_KEY = os.getenv("SECRET_KEY", "secret")
+ALGORITHM = "HS256"
 
-@router.get("/users")
-def get_users(request: Request):
-    userLevel = request.headers.get("userLevel")
+# Payload Generator
+def generate_data(count):
+    return {"results": [{"id": i, "desc": ''.join(random.choices(string.ascii_letters, k=100))} for i in range(count)]}
 
-    if userLevel == "admin":
-        return {"message": "Admin data"}
-    
+PAYLOADS = {"small": generate_data(1000), "medium": generate_data(10000), "large": generate_data(35000)}
+
+def verify_security(request: Request):
+    """Denna funktion SIMULERAR overheaden av Zero Trust"""
+    if os.getenv("INTERNAL_SECURITY") == "HTTPS":
+        auth_header = request.headers.get("Authorization")
+        if not auth_header: raise HTTPException(status_code=401)
+        try:
+            token = auth_header.split(" ")[1]
+            jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            return {"Authorization": auth_header} # Skicka vidare tunga tokenet
+        except JWTError: raise HTTPException(status_code=401)
     else:
-        return {"users": ["Alice", "Bob", "Charlie"]}
+        # HYBRID
+        return {"userLevel": request.headers.get("userLevel", "user")}
+    
+@router.get("/users/{size}")
+async def get_users(size: str, request: Request):
+
+    verify_security(request) 
+    return PAYLOADS.get(size, PAYLOADS["small"])

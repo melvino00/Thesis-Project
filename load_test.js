@@ -20,7 +20,7 @@ export function setup() {
 
     // Change between /single/chained for different scenarios
     // Change between /small/medium/large for different payloads
-    const url = 'http://localhost:8000/chained/small'; 
+    const url = 'http://localhost:8000/single/small'; 
     const params = {
         headers: {
             'Authorization': `Bearer ${data.token}`,

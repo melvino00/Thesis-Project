@@ -48,7 +48,7 @@ with open('metrics_output.csv', 'w', newline='') as f:
                     else:
                         cpu_perc = 0.0
                         
-                    writer.writerow([time.time(), c.name, f"{cpu_perc:.2f}"])
+                    writer.writerow([time.time(), c.name, f"{cpu_perc:.2f}"]).replace('.', ',') # Replace dot with comma for decimal
                     
                 except Exception as e:
                     print(f"Kunde inte läsa stats för {c.name}. Fel: {e}")

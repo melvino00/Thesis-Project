@@ -47,8 +47,9 @@ with open('metrics_output.csv', 'w', newline='') as f:
                         cpu_perc = (cpu_delta / sys_delta) * online_cpus * 100.0
                     else:
                         cpu_perc = 0.0
-                        
-                    writer.writerow([time.time(), c.name, f"{cpu_perc:.2f}"]).replace('.', ',') # Replace dot with comma for decimal
+                    
+                    cpu_perc_str = f"{cpu_perc:.2f}".replace('.', ',')
+                    writer.writerow([time.time(), c.name, cpu_perc_str])
                     
                 except Exception as e:
                     print(f"Could not read stas for {c.name}. Error: {e}")

@@ -12,7 +12,10 @@ ALGORITHM = "HS256"
 def generate_data(count):
     return {"results": [{"id": i, "desc": ''.join(random.choices(string.ascii_letters, k=100))} for i in range(count)]}
 
-PAYLOADS = {"small": generate_data(1000), "medium": generate_data(10000), "large": generate_data(35000)}
+PAYLOADS = {
+    "small": generate_data(10240),   # Creates 10 KB
+    "large": generate_data(102400)   # Creates 100 KB
+}
 
 def verify_security(request: Request):
     """Denna funktion SIMULERAR overheaden av Zero Trust"""

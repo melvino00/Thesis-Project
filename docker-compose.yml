@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   api_gateway:
+    image: api_gateway:local
     build: ./API_gateway
     ports:
       - "8000:8000"
@@ -16,6 +17,7 @@ services:
           cpus: 0.50  # Resource limit for stable measurements
 
   auth_service:
+    image: auth_service:local
     build: ./auth_service
     networks:
       - micro_network
@@ -25,6 +27,7 @@ services:
           cpus: '0.50'
 
   user_service:
+    image: user_service:local
     build: ./user_service
     # No ports resulting in no way in
     networks:
@@ -35,6 +38,7 @@ services:
           cpus: '0.50'
 
   data_service:
+    image: data_service:local
     build: ./data_service
     networks:
       - micro_network
